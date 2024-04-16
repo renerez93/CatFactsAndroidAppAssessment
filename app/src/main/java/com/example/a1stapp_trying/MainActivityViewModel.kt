@@ -35,15 +35,15 @@ class MainActivityViewModel: ViewModel() {
 
     // This function obtains a new CatFact
     private suspend fun getFact() {
-        val catFact = RetrofitClient.catFactService.getCatFact().toString()
-        _TheCatFact.value = catFact.dropLast(1).removeRange(0, 21)
-        transientDataStorage.addItem(TempItem(contador.value ?: 0, catFact))
+        val catFactResponse = RetrofitClient.catFactService.getCatFact()
+        _TheCatFact.value = catFactResponse.fact
+        transientDataStorage.addItem(TempItem(contador.value ?: 0, catFactResponse.fact))
     }
 
     // This function obtains a old CatFact
     private suspend fun oldFact(a: Int) {
-        val catFact = transientDataStorage.getItemById(a).toString()
-        _TheCatFact.value = catFact.dropLast(2).removeRange(0, 44)
+        val catFact = transientDataStorage.getItemById(a)
+        _TheCatFact.value = catFact?.content
     }
 
     suspend fun newFact() {
